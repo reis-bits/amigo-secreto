@@ -1,10 +1,21 @@
+
+
 let amigosIncluidos = [];
 let listaAmigos = document.getElementById('lista-amigos');
 let listaSorteio = document.getElementById('lista-sorteio');
 
 function adicionar() {
 
-    let nomeAmigo = document.getElementById('nome-amigo').value;
+    let nomeAmigo = document.getElementById('nome-amigo').value.toUpperCase();
+    if(nomeAmigo == '') {
+        alert('Informe um nome!');
+        return;
+    }
+
+    if(amigosIncluidos.includes(nomeAmigo)) {
+        alert('Esse nome já foi colocado, inclua também o sobrenome');
+        return;
+    }
 
     amigosIncluidos.push(nomeAmigo);
     listaAmigos.innerHTML = ` <p id="lista-amigos"> ${amigosIncluidos} </p>`;
@@ -16,6 +27,12 @@ function adicionar() {
 
 function sortear() {
     embaralhar(amigosIncluidos);
+
+    if(amigosIncluidos.length < 4) {
+        alert('Você precisa de pelo menos 4 participantes');
+        return;
+    }
+
 
     for (let i = 0; i < amigosIncluidos.length; i++) {
 
