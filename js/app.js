@@ -4,6 +4,19 @@ let listaAmigos = document.getElementById('lista-amigos');
 let listaSorteio = document.getElementById('lista-sorteio');
 
 
+function navegacaoTeclado() {
+    const inputNome = document.getElementById('nome-amigo');
+
+    inputNome.addEventListener('keydown', (event) => {
+        if (event.key == 'Enter') {
+            adicionar();
+            event.preventDefault();
+        }
+    });
+}
+
+window.onload = navegacaoTeclado;
+
 // Função que adiciona os amigos ao sorteio e atualiza o array
 function adicionar() {
 
@@ -11,13 +24,13 @@ function adicionar() {
     let nomeAmigo = document.getElementById('nome-amigo').value.toUpperCase();
 
     // Se nenhum nome for informado no input, retorna a função e exibe um alerta pedindo um nome.
-    if(nomeAmigo == '') {
+    if (nomeAmigo == '') {
         alert('Informe um nome!');
         return;
     }
 
     // Caso o nome digitado já tenha sido incluido, retorna a função e exibe um alerta, relatando a repetição.
-    if(amigosIncluidos.includes(nomeAmigo)) {
+    if (amigosIncluidos.includes(nomeAmigo)) {
         alert('Esse nome já foi incluido');
         return;
     }
@@ -32,19 +45,31 @@ function adicionar() {
     console.log(amigosIncluidos);
 }
 
-
 // Função responsável por realizar o sorteio e imprimir no HTML
 function sortear() {
     // Recupera a função embaralhar.
     embaralhar(amigosIncluidos);
 
     // Impede o sorteio de acontecer se haver menos de 4 incluidos.
-    if(amigosIncluidos.length < 4) {
+    if (amigosIncluidos.length < 4) {
         alert('Você precisa de pelo menos 4 participantes');
         return;
     }
 
-    // Imprime o sorteio no HTML, pegando os elementos do Array um índice após o outro.
+    // Condicional que lê o HTML e determina que, se a lista possui texto (Ou seja, já rolou sorteio)...
+    if (listaSorteio.innerHTML.trim() != '') {
+        // Que seja esvaziada e chama a função imprimir sorteio.
+        listaSorteio.innerHTML = '';
+        resultadoSorteio();
+        // Se a lista não possuir texto...
+    } else {
+        // Ela simnplesmente pega os resultados do sorteio, e imprime.
+        resultadoSorteio();
+    }
+
+}
+
+function resultadoSorteio() {
     for (let i = 0; i < amigosIncluidos.length; i++) {
 
         if (i == amigosIncluidos.length - 1) {
@@ -61,7 +86,7 @@ function embaralhar(li) {
     for (let i = li.length; i > 0; i--) {
         // Gera um índice aleatório entre 0 e i (exclusivo)
         const iAleatorio = Math.floor(Math.random() * i);
-        
+
         // Troca o elemento na posição i-1 com o elemento na posição iAleatorio
         [li[i - 1], li[iAleatorio]] = [li[iAleatorio], li[i - 1]];
     }
